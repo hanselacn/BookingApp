@@ -1,0 +1,54 @@
+// package helper
+
+// import (
+// 	"time"
+
+// 	"github.com/google/uuid"
+// 	"github.com/kataras/jwt"
+// 	"gitlab.privy.id/go_graphql/pkg/logger"
+// )
+
+// func GenerateToken(id uuid.UUID, isAdmin bool, secKey string, age time.Duration) (token *string) {
+// 	standard := jwt.Claims{
+// 		Expiry:   time.Now().Add(age * time.Minute).Local().Unix(),
+// 		IssuedAt: time.Now().Unix(),
+// 		Issuer:   "EvenInJogjaAuth",
+// 	}
+
+// 	tkn, err := jwt.Sign(jwt.HS256, []byte(secKey), map[string]interface{}{
+// 		"user": &entity.Claim{ID: id, IsAdmin: isAdmin},
+// 	}, &standard)
+
+// 	if err != nil {
+// 		logger.Error(err)
+// 		return nil
+// 	}
+
+// 	tmptkn := string(tkn)
+
+// 	return &tmptkn
+// }
+
+// func VerifyToken(secKey string, tkn string) (claim *entity.Claim, err error) {
+// 	type myClaims struct {
+// 		User     entity.Claim
+// 		Expiry   int64
+// 		IssuedAt int
+// 		Issuer   string
+// 	}
+
+// 	clm := new(myClaims)
+// 	verifiedToken, err := jwt.Verify(jwt.HS256, []byte(secKey), []byte(tkn))
+
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	err = verifiedToken.Claims(&clm)
+
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return &clm.User, nil
+// }

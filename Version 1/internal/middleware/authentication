@@ -1,0 +1,43 @@
+// Package middleware
+package middleware
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"strings"
+
+	"gitlab.privy.id/go_graphql/internal/appctx"
+	"gitlab.privy.id/go_graphql/pkg/logger"
+)
+
+// ValidateContentType header
+func Authentication(w http.ResponseWriter, r *http.Request, conf *appctx.Config) bool {
+	logger.Info(fmt.Sprintln("[middleware] Checkusername"))
+
+	headerToken := r.Header.Get("Authorization")
+	bearer := strings.HasPrefix(headerToken, "Bearer")
+	if !bearer {
+		w.WriteHeader(http.StatusBadRequest)
+		return false
+	}
+
+	stringToken := strings.Split(headerToken, " ")[1]
+	if stringToken == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return false
+	}
+
+	claim, e := helper.VerifyToken("rahasia", stringToken)
+
+	if e != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return false
+	}
+
+	ctx := context.WithValue(r.Context(), "userinfo", claim)
+
+	*r = *r.WithContext(ctx)
+
+	return true
+}
